@@ -8,6 +8,7 @@ authors = [
 ]
 requires-python = ">=3.14"
 dependencies = [
+    "fastapi>=0.141.1",
     "ipykernel>=7.3.0",
     "langchain>=1.4.0",
     "langchain-community>=0.4.2",
@@ -15,6 +16,7 @@ dependencies = [
     "pymupdf>=1.28.2",
     "pypdf>=6.17.0",
     "python-dotenv>=1.2.3",
+    "uvicorn>=0.54.0",
     "weaviate-client>=4.23.1",
 ]
 

@@ -2,7 +2,7 @@
 
 create table file_items (
   -- ID
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
   -- RELATIONSHIPS
   file_id UUID NOT NULL REFERENCES files(id) ON DELETE CASCADE,
@@ -17,8 +17,8 @@ create table file_items (
 
   -- REQUIRED
   content TEXT NOT NULL,
-  local_embedding vector(384), -- 384 works for local w/ Xenova/all-MiniLM-L6-v2
-  openai_embedding vector(1536), -- 1536 for OpenAI
+  local_embedding extensions.vector(384), -- 384 works for local w/ Xenova/all-MiniLM-L6-v2
+  openai_embedding extensions.vector(1536), -- 1536 for OpenAI
   tokens INT NOT NULL
 );
 
@@ -27,10 +27,10 @@ create table file_items (
 CREATE INDEX file_items_file_id_idx ON file_items(file_id);
 
 CREATE INDEX file_items_embedding_idx ON file_items
-  USING hnsw (openai_embedding vector_cosine_ops);
+  USING hnsw (openai_embedding extensions.vector_cosine_ops);
 
 CREATE INDEX file_items_local_embedding_idx ON file_items
-  USING hnsw (local_embedding vector_cosine_ops);
+  USING hnsw (local_embedding extensions.vector_cosine_ops);
 
 -- RLS
 
@@ -58,7 +58,7 @@ EXECUTE PROCEDURE update_updated_at_column();
 -- FUNCTIONS --
 
 create function match_file_items_local (
-  query_embedding vector(384),
+  query_embedding extensions.vector(384),
   match_count int DEFAULT null,
   file_ids UUID[] DEFAULT null
 ) returns table (
@@ -87,7 +87,7 @@ end;
 $$;
 
 create function match_file_items_openai (
-  query_embedding vector(1536),
+  query_embedding extensions.vector(1536),
   match_count int DEFAULT null,
   file_ids UUID[] DEFAULT null
 ) returns table (

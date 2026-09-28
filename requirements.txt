@@ -9,3 +9,5 @@ langchain-huggingface
 sentence-transformers
 faiss-cpu
 waeviate-client
+fastapi
+uvicorn
